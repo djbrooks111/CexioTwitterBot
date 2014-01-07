@@ -40,7 +40,7 @@ Sources and additional help
 ===========================
 
 Two very helpful frameworks were required for this script to work properly.
-Those are Cex.io's php api and David Grudl's twitter-php.
+Those are Cex.io's php api and Matt Harris' tmhOAuth.
 They can be found at these locations:
 
-http://github.com/matveyco/cex.io-api-php and http://github.com/dg/twitter-php
+http://github.com/matveyco/cex.io-api-php and http://github.com/themattharris/tmhOAuth

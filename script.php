@@ -26,7 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-
 // Getting the price from Cex.io
 require_once("cexapi.class.php");
 
@@ -36,34 +35,33 @@ $api_secret	= "api_secret";
 
 $api = new cexapi($username, $api_key, $api_secret);
 $tick = $api->ticker("GHS/BTC");
-var_dump($tick);
 $price = $tick["last"];
 
-echo "Current Price: $price";
-
-//Tweeting part of the script
-require_once("twitter.class.php");
+// Tweeting part of the script
+require_once("tmhOAuth.php");
 
 $consumerKey    = "consumerKey";
 $consumerSecret = "consumerSecret";
 $oAuthToken     = "oAuthToken";
 $oAuthSecret    = "oAuthSecret";
 
-$twitter = new Twitter($consumerKey, $consumerSecret, $oAuthToken, $oAuthSecret);
+$tmhOAuth = new tmhOAuth(array(
+	'consumer_key' => $consumerKey,
+	'consumer_secret' => $consumerSecret,
+	'token' => $oAuthToken,
+	'secret' => $oAuthSecret,
+	));
+	
+$response = $tmhOAuth->request('POST', $tmhOAuth->url('1.1/statuses/update'), array(
+	'status' => "The price of GHS/BTC on Cex.io is now $price"
+	));
 
-try {
-	$tweet = $twitter->send("The price of GHS/BTC on Cex.io is now $price");
-} catch (TwitterException $e) {
-	echo "Error: " . $e->getMessage();
-	$compare = "Status is a duplicate.";
-	if (strcmp($e->getMessage(), $compare) == 0) {
-		echo "Resending different status";
-		try {
-			$tweetTwo = $twitter->send("The price of GHS/BTC on Cex.io is still $price");
-		} catch (TwitterException $eTwo) {
-			echo "ErrorTwo: " . $eTwo->getMessage();
-		}
-	}
+if ($response != 200) {
+	// Unsuccessful response
+	echo "ERROR: $response";
+} else {
+	echo "ALL GOOD";
 }
+
 
 ?>
