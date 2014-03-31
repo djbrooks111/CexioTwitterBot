@@ -52,15 +52,13 @@ $tmhOAuth = new tmhOAuth(array(
 	'secret' => $oAuthSecret,
 	));
 	
-$response = $tmhOAuth->request('POST', $tmhOAuth->url('1.1/statuses/update'), array(
+$tmhOAuth->request('POST', $tmhOAuth->url('1.1/statuses/update'), array(
 	'status' => "The price of GHS/BTC on Cex.io is now $price"
 	));
 
-if ($response != 200) {
-	// Unsuccessful response
-	echo "ERROR: $response";
-} else {
-	echo "ALL GOOD";
+if ($tmhOAuth->response['code'] != 200) {
+	//Unsuccessful post, printing error message
+	print_r(htmlentities($tmhOAuth->response['response']));
 }
 
 
